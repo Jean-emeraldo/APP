@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Résultat</title>
+</head>
+<body>
+    <h1>Résultat de la Prédiction</h1>
+    <p>Patient: {{ patient.name }}</p>
+    <p>Âge: {{ patient.age }}</p>
+    <h3>Résultat: {% if patient.outcome %}Positif{% else %}Négatif{% endif %}</h3>
+    <a href="{% url 'predict' %}">Nouvelle Prédiction</a>
+</body>
+</html>
