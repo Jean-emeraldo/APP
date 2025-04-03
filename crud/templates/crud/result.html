@@ -1,13 +1,38 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Résultat</title>
+    <title>Résultat de la Prédiction</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 </head>
 <body>
-    <h1>Résultat de la Prédiction</h1>
-    <p>Patient: {{ patient.name }}</p>
-    <p>Âge: {{ patient.age }}</p>
-    <h3>Résultat: {% if patient.outcome %}Positif{% else %}Négatif{% endif %}</h3>
-    <a href="{% url 'predict' %}">Nouvelle Prédiction</a>
+    <div class="container">
+        <h1>Résultat de la Prédiction Médicale</h1>
+        <table>
+            <tr>
+                <th>Information</th>
+                <th>Valeur</th>
+            </tr>
+            <tr>
+                <td>Patient</td>
+                <td>{{ patient.name }}</td>
+            </tr>
+            <tr>
+                <td>Âge</td>
+                <td>{{ patient.age }}</td>
+            </tr>
+            <tr>
+                <td>Symptômes</td>
+                <td>{{ patient.symptoms }}</td>
+            </tr>
+            <tr>
+                <td>Résultat</td>
+                <td class="{% if patient.outcome %}positif{% else %}negatif{% endif %}">
+                    {% if patient.outcome %}Positif{% else %}Négatif{% endif %}
+                </td>
+            </tr>
+        </table>
+        <a href="{% url 'predict' %}">Nouvelle Prédiction</a>
+    </div>
 </body>
 </html>

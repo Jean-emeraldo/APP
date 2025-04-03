@@ -1,18 +1,346 @@
-{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-    <title>Formulaire de Prédiction du Diabète</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Système de prédiction médicale</title>
+    <style>
+        /* CSS personnalisé */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            line-height: 1.6;
+            padding: 20px;
+            background-color: #f0f7ff;
+            color: #2c3e50;
+        }
+
+        .table-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            overflow-x: auto;
+        }
+
+        h2 {
+            margin: 25px 0 15px;
+            color: #2c3e50;
+            font-size: 1.5rem;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+            text-align: center;
+            
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 25px;
+            background-color: white;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 14px 18px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            background-color: #3498db;
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9em;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        tr:hover {
+            background-color: #f1f8ff;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.1);
+        }
+
+        label {
+            display: block;
+            padding: 8px 0;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        label:hover {
+            color: #3498db;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            margin-top: 15px;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            th, td {
+                padding: 12px;
+                font-size: 0.9em;
+            }
+            
+            h2 {
+                font-size: 1.3em;
+            }
+            
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            th, td {
+                padding: 10px;
+                font-size: 0.85em;
+            }
+            
+            button {
+                width: 100%;
+                padding: 15px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Formulaire de Prédiction du Diabète</h1>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Prédire</button>
+    <div class="table-container">
+        <form id="patient-form" method="post">
+          <h2>SYSTEME DE PREDICTION MEDICAL</h2>
+            <table>
+                <tr>
+                    <th>Nom</th>
+                    <th>Âge</th>
+                </tr>
+                <tr>
+                    <td><input type="text" name="name" placeholder="Jean Dupont" required></td>
+                    <td><input type="number" name="age" placeholder="35" min="1" max="120" required></td>
+                </tr>
+            </table>
+            <button type="button" id="add-patient">Ajouter un patient</button>
+
+            <!-- Sélection des symptômes -->
+            <h2>Sélectionnez vos symptômes</h2>
+            <table class="symptoms-table">
+                <tr>
+                    <th>Maladie</th>
+                    <th>Symptômes</th>
+                </tr>
+                <!-- Liste des maladies/symptômes -->
+                <tr>
+                    <td>Paludisme</td>
+                    <td>
+                        <label><input type="checkbox" name="symptom" value="Fièvre"> Fièvre</label>
+                        <label><input type="checkbox" name="symptom" value="Frissons"> Frissons</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Tuberculose</td>
+                    <td>
+                        <label><input type="checkbox" name="symptom" value="Toux"> Toux</label>
+                        <label><input type="checkbox" name="symptom" value="Fatigue"> Fatigue</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>VIH/SIDA</td>
+                    <td>
+                        <label><input type="checkbox" name="symptom" value="Perte de poids"> Perte de poids</label>
+                        <label><input type="checkbox" name="symptom" value="Fièvre"> Fièvre</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Dengue</td>
+                    <td>
+                        <label><input type="checkbox" name="symptom" value="Douleurs musculaires"> Douleurs musculaires</label>
+                        <label><input type="checkbox" name="symptom" value="Éruption cutanée"> Éruption cutanée</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Choléra</td>
+                    <td>
+                        <label><input type="checkbox" name="symptom" value="Diarrhée"> Diarrhée</label>
+                        <label><input type="checkbox" name="symptom" value="Vomissements"> Vomissements</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Diabète</td>
+                    <td>
+                        <label><input type="checkbox" name="symptom" value="Soif excessive"> Soif excessive</label>
+                        <label><input type="checkbox" name="symptom" value="Fatigue"> Fatigue</label>
+                    </td>
+                </tr>
+            </table>
+            <button type="submit">Analyser les symptômes</button>
         </form>
+
+        <!-- Résumé des prédictions -->
+        <h2>Résumé des Prédictions</h2>
+        <table id="summary-table">
+            <thead>
+                <tr>
+                    <th>Maladie</th>
+                    <th>Porteurs</th>
+                    <th>Effectif</th>
+                    <th>Pourcentage</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Résultats dynamiques -->
+                <tr>
+                    <td colspan="4" style="text-align: center; padding: 20px;">
+                        Aucun résultat à afficher
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
+
+    <script>
+       document.getElementById('add-patient').addEventListener('click', function () {
+    const table = document.querySelector("#patient-form table"); // Sélection du tableau contenant les patients
+    
+    // Création d'une nouvelle ligne pour ajouter un patient
+    const newRow = document.createElement("tr");
+
+    // Création des cellules Nom et Âge et du bouton de suppression
+    newRow.innerHTML = `
+        <td><input type="text" name="name" placeholder="Jean Dupont" required></td>
+        <td><input type="number" name="age" placeholder="35" min="1" max="120" required></td>
+        <td><button type="button" class="delete-btn">Supprimer</button></td>
+    `;
+
+    // Ajouter la ligne au tableau
+    table.appendChild(newRow);
+
+    // Ajout de l'événement pour supprimer la ligne
+    newRow.querySelector('.delete-btn').addEventListener('click', function () {
+        newRow.remove(); // Supprimer la ligne
+    });
+});
+
+document.getElementById('patient-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    // Récupération des patients (toutes les lignes de saisie)
+    const patients = [];
+    document.querySelectorAll('#patient-form table tr:not(:first-child)').forEach(row => {
+        const name = row.querySelector('input[name="name"]').value.trim();
+        const age = row.querySelector('input[name="age"]').value.trim();
+        
+        if (name !== "" && age !== "") {
+            patients.push({ name, age });
+        }
+    });
+
+    if (patients.length === 0) {
+        alert("Veuillez ajouter au moins un patient.");
+        return;
+    }
+
+    // Récupération des symptômes sélectionnés
+    const selectedSymptoms = Array.from(document.querySelectorAll('input[name="symptom"]:checked'))
+        .map(checkbox => checkbox.value);
+
+    if (selectedSymptoms.length === 0) {
+        alert("Veuillez sélectionner au moins un symptôme.");
+        return;
+    }
+
+    // Association des maladies et de leurs symptômes
+    const diseaseSymptoms = {
+        "Paludisme": ["Fièvre", "Frissons"],
+        "Tuberculose": ["Toux", "Fatigue"],
+        "VIH/SIDA": ["Perte de poids", "Fièvre"],
+        "Dengue": ["Douleurs musculaires", "Éruption cutanée"],
+        "Choléra": ["Diarrhée", "Vomissements"],
+        "Diabète": ["Soif excessive", "Fatigue"]
+    };
+
+    // Détermination des maladies possibles
+    let detectedDiseases = {};
+
+    Object.keys(diseaseSymptoms).forEach(disease => {
+        const symptoms = diseaseSymptoms[disease];
+        const matchingSymptoms = symptoms.filter(symptom => selectedSymptoms.includes(symptom));
+
+        if (matchingSymptoms.length > 0) {
+            detectedDiseases[disease] = matchingSymptoms;
+        }
+    });
+
+    // Mise à jour du tableau de résumé
+    const summaryTable = document.querySelector("#summary-table tbody");
+    summaryTable.innerHTML = ""; // Nettoyage de la table avant d'ajouter de nouvelles lignes
+
+    if (Object.keys(detectedDiseases).length === 0) {
+        summaryTable.innerHTML = `<tr><td colspan="4" style="text-align: center; padding: 20px;">Aucune maladie détectée</td></tr>`;
+    } else {
+        Object.keys(detectedDiseases).forEach(disease => {
+            patients.forEach(patient => {
+                const row = `<tr>
+                    <td>${disease}</td>
+                    <td>${patient.name}, ${patient.age} ans</td>
+                    <td>1</td>
+                    <td>100%</td>
+                </tr>`;
+                summaryTable.innerHTML += row;
+            });
+        });
+    }
+
+    alert("Analyse terminée !");
+});
+
+
+
+    </script>
 </body>
 </html>
