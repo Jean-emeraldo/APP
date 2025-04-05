@@ -1,38 +1,48 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
+    <meta charset="UTF-8">
     <title>Résultat de la Prédiction</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
     <div class="container">
         <h1>Résultat de la Prédiction Médicale</h1>
         <table>
-            <tr>
-                <th>Information</th>
-                <th>Valeur</th>
-            </tr>
-            <tr>
-                <td>Patient</td>
-                <td>{{ patient.name }}</td>
-            </tr>
-            <tr>
-                <td>Âge</td>
-                <td>{{ patient.age }}</td>
-            </tr>
-            <tr>
-                <td>Symptômes</td>
-                <td>{{ patient.symptoms }}</td>
-            </tr>
-            <tr>
-                <td>Résultat</td>
-                <td class="{% if patient.outcome %}positif{% else %}negatif{% endif %}">
-                    {% if patient.outcome %}Positif{% else %}Négatif{% endif %}
-                </td>
-            </tr>
+            <thead>
+                <tr>
+                    <th>Information</th>
+                    <th>Valeur</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Nom du Patient</td>
+                    <td>{{ patient.name }}</td>
+                </tr>
+                <tr>
+                    <td>Âge</td>
+                    <td>{{ patient.age }}</td>
+                </tr>
+                <tr>
+                    <td>Symptômes</td>
+                    <td>
+                        Glucose : {{ patient.glucose }}<br>
+                        Pression : {{ patient.blood_pressure }}<br>
+                        BMI : {{ patient.bmi }}
+                        <!-- Tu peux ajouter les autres champs ici si tu veux tout afficher -->
+                    </td>
+                </tr>
+                <tr>
+                    <td>Résultat</td>
+                    <td class="{% if patient.outcome %}positif{% else %}negatif{% endif %}">
+                        {% if patient.outcome %}Positif{% else %}Négatif{% endif %}
+                    </td>
+                </tr>
+            </tbody>
         </table>
-        <a href="{% url 'predict' %}">Nouvelle Prédiction</a>
+        <a href="{% url 'predict' %}">Faire une nouvelle prédiction</a>
     </div>
 </body>
 </html>

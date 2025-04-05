@@ -9,6 +9,11 @@ class PatientForm(forms.ModelForm):
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'age': forms.NumberInput(attrs={'class': 'form-control'}),
+            'pregnancies': forms.NumberInput(attrs={'class': 'form-control'}),
             'glucose': forms.NumberInput(attrs={'class': 'form-control'}),
             'blood_pressure': forms.NumberInput(attrs={'class': 'form-control'}),
+            'skin_thickness': forms.NumberInput(attrs={'class': 'form-control'}),
+            'insulin': forms.NumberInput(attrs={'class': 'form-control'}),
+            'bmi': forms.NumberInput(attrs={'class': 'form-control'}),
+            'diabetes_pedigree': forms.NumberInput(attrs={'class': 'form-control'}),
         }

@@ -6,14 +6,13 @@ import os
 from django.conf import settings
 from django.contrib import messages
 
-
 def predict_diabetes(request):
     if request.method == 'POST':
         form = PatientForm(request.POST)
         if form.is_valid():
             patient = form.save(commit=False)
 
-            # Charger le modèle ML
+            # Chemin vers le modèle
             model_path = os.path.join(settings.BASE_DIR, 'crud/ml_models/diabetes_model.pkl')
 
             if not os.path.exists(model_path):
@@ -26,7 +25,7 @@ def predict_diabetes(request):
                 messages.error(request, f"Erreur lors du chargement du modèle : {e}")
                 return redirect('predict')
 
-            # Préparer les données pour la prédiction
+            # Préparer les données
             data = [[
                 patient.pregnancies,
                 patient.glucose,
@@ -48,7 +47,6 @@ def predict_diabetes(request):
                 return redirect('predict')
 
             return render(request, 'crud/result.html', {'patient': patient})
-
     else:
         form = PatientForm()
 
